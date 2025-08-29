@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>貓咪罐罐 & 乾乾紀錄</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- iOS 專屬：加到主畫面時的樣式 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/icons/icon-512.png">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="記錄罐罐/乾乾、喜好、吃況，含庫存管理與進貨">
+    <meta name="keywords" content="貓咪,寵物,罐頭,乾糧,記錄,庫存管理">
+    <meta name="author" content="貓咪紀錄應用">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-192.png">
+    
+    <!-- Basic Styling -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 40px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #334155;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            border-color: #60a5fa;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #f1f5f9;
+        }
+        
+        .feature-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .app-info {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #334155;
+        }
+        
+        .install-notice {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .install-notice strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .status.success {
+            background: #065f46;
+            color: #6ee7b7;
+        }
+        
+        .status.error {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 640px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🐾 貓咪罐罐 & 乾乾紀錄</h1>
+            <p class="subtitle">智慧記錄貓咪飲食、喜好追蹤、庫存管理一體化解決方案</p>
+            
+            <div class="install-notice">
+                <strong>📱 可安裝為應用程式</strong>
+                在支援的瀏覽器中，您可以將此應用安裝到裝置桌面，享受原生應用體驗！
+            </div>
+        </header>
+        
+        <main>
+            <div class="app-info">
+                <h2 style="margin-bottom: 20px; color: #f1f5f9;">🎯 應用特色</h2>
+                
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">🍽️</div>
+                        <h3 class="feature-title">餵食記錄</h3>
+                        <p class="feature-desc">記錄每次餵食的食物、份量、貓咪喜好程度，建立完整的飲食檔案</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">智慧分析</h3>
+                        <p class="feature-desc">自動分析貓咪喜好，提供人氣食物排行榜和飲食趨勢</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3 class="feature-title">庫存管理</h3>
+                        <p class="feature-desc">智慧庫存追蹤，低庫存警示，批次管理，進貨記錄</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⏰</div>
+                        <h3 class="feature-title">到期提醒</h3>
+                        <p class="feature-desc">批次到期日追蹤，避免食物過期浪費</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📤</div>
+                        <h3 class="feature-title">資料匯出</h3>
+                        <p class="feature-desc">支援 CSV 格式匯出，方便資料備份與分析</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🌙</div>
+                        <h3 class="feature-title">離線使用</h3>
+                        <p class="feature-desc">支援離線瀏覽，無網路環境也能查看記錄</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="app-info">
+                <h2 style="margin-bottom: 20px; color: #f1f5f9;">🚀 開始使用</h2>
+                <p style="color: #94a3b8; margin-bottom: 15px;">
+                    這是一個 Progressive Web App (PWA)，您可以：
+                </p>
+                <ul style="text-align: left; color: #94a3b8; max-width: 400px; margin: 0 auto;">
+                    <li style="margin-bottom: 8px;">📱 安裝到手機桌面</li>
+                    <li style="margin-bottom: 8px;">💻 安裝到電腦桌面</li>
+                    <li style="margin-bottom: 8px;">🌐 直接在瀏覽器使用</li>
+                    <li style="margin-bottom: 8px;">📶 離線瀏覽已快取內容</li>
+                </ul>
+                
+                <div id="install-status" class="status" style="display: none;"></div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p>貓咪罐罐 & 乾乾紀錄 - 讓記錄變得簡單，讓愛更有條理 🐱</p>
+        </footer>
+    </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        // Service Worker 註冊
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('✅ Service Worker 註冊成功:', registration);
+                    showStatus('Service Worker 已啟用，支援離線瀏覽', 'success');
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker 註冊失敗:', error);
+                    showStatus('Service Worker 註冊失敗', 'error');
+                });
+        }
+
+        // PWA 安裝提示
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // 防止瀏覽器自動顯示安裝提示
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // 顯示自定義安裝按鈕
+            showInstallButton();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ PWA 已安裝');
+            showStatus('應用程式已成功安裝到您的裝置！', 'success');
+            deferredPrompt = null;
+        });
+
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('install-status');
+            statusElement.textContent = message;
+            statusElement.className = `status ${type}`;
+            statusElement.style.display = 'block';
+            
+            // 3秒後隱藏狀態
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 3000);
+        }
+
+        function showInstallButton() {
+            const installNotice = document.querySelector('.install-notice');
+            if (installNotice && deferredPrompt) {
+                installNotice.innerHTML = `
+                    <strong>📱 可安裝為應用程式</strong>
+                    <button onclick="installApp()" style="
+                        background: white; 
+                        color: #1d4ed8; 
+                        border: none; 
+                        padding: 8px 16px; 
+                        border-radius: 6px; 
+                        font-weight: 600;
+                        cursor: pointer;
+                        margin-left: 10px;
+                    ">立即安裝</button>
+                `;
+            }
+        }
+
+        async function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    console.log('✅ 使用者接受安裝');
+                } else {
+                    console.log('❌ 使用者拒絕安裝');
+                }
+                
+                deferredPrompt = null;
+            }
+        }
+
+        // 檢查是否在獨立模式運行（已安裝）
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('✅ 應用在獨立模式運行');
+            showStatus('歡迎使用已安裝的貓咪記錄應用！', 'success');
+        }
+    </script>
+</body>
+</html>
