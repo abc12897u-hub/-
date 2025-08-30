@@ -1,13 +1,14 @@
 /* 簡易離線快取：HTML + 靜態資產 */
-const CACHE_NAME = "cat-meals-v1";
+const CACHE_NAME = "cat-meals-v3";
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/manifest.webmanifest",
-  // 若你的檔名不是 index.html，請改這裡
-  // 若有額外 CSS/JS/圖檔，請一併列出，例如：
-  // "/icons/icon-192.png",
-  // "/icons/icon-512.png",
+  "/cat-meals/",
+  "/cat-meals/index.html",
+  "/cat-meals/app.html",
+  "/cat-meals/app.js",
+  "/cat-meals/manifest.webmanifest",
+  "/cat-meals/icons/icon-192.png",
+  "/cat-meals/icons/icon-512.png",
+  "/cat-meals/icons/maskable-512.png",
 ];
 
 self.addEventListener("install", (event) => {
@@ -39,7 +40,7 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((c) => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match(req).then((c) => c || caches.match("/index.html")))
+        .catch(() => caches.match(req).then((c) => c || caches.match("/cat-meals/index.html")))
     );
   } else {
     event.respondWith(
