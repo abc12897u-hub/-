@@ -6,13 +6,13 @@
     <title>貓咪罐罐 & 乾乾紀錄</title>
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/-/manifest.webmanifest">
+    <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#0f172a">
     
     <!-- iOS 專屬：加到主畫面時的樣式 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="/cat-meals/icons/icon-512.png">
+    <link rel="apple-touch-icon" href="icons/icon-512.png">
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="記錄罐罐/乾乾、喜好、吃況，含庫存管理與進貨">
@@ -20,8 +20,8 @@
     <meta name="author" content="貓咪紀錄應用">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/cat-meals/icons/icon-192.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/cat-meals/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-192.png">
     
     <!-- Basic Styling -->
     <style>
@@ -174,7 +174,7 @@
                 <strong>📱 可安裝為應用程式</strong>
                 在支援的瀏覽器中，您可以將此應用安裝到裝置桌面，享受原生應用體驗！
                 <br><br>
-                <a href="/cat-meals/app.html" style="
+                <a href="app.html" style="
                     background: white; 
                     color: #1d4ed8; 
                     padding: 12px 24px; 
@@ -255,7 +255,7 @@
     <script>
         // Service Worker 註冊
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/cat-meals/sw.js')
+            navigator.serviceWorker.register('sw.js')
                 .then(registration => {
                     console.log('✅ Service Worker 註冊成功:', registration);
                     showStatus('Service Worker 已啟用，支援離線瀏覽', 'success');

@@ -3,14 +3,14 @@
   "short_name": "貓咪紀錄",
   "description": "記錄罐罐/乾乾、喜好、吃況，含庫存管理與進貨",
   "lang": "zh-Hant-TW",
-  "start_url": "/cat-meals/index.html",
-  "scope": "/cat-meals/",
+  "start_url": "index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "icons": [
-    { "src": "/cat-meals/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/cat-meals/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/cat-meals/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
