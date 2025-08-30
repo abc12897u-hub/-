@@ -143,9 +143,17 @@ class CatFoodApp {
         const stock = parseFloat(document.getElementById('food-stock').value) || 0;
         const alert = parseFloat(document.getElementById('food-alert').value) || 5;
         const notes = document.getElementById('food-notes').value.trim();
+        const perCanGrams = parseInt(document.getElementById('food-per-can-grams').value) || null;
+        const price = parseFloat(document.getElementById('food-price').value) || null;
         
         if (!name || !type || !unit) {
             this.showNotification('請填寫必要欄位！', 'error');
+            return;
+        }
+        
+        // 罐頭類型必須填寫每罐重量
+        if (unit === 'can' && !perCanGrams) {
+            this.showNotification('罐頭類型必須填寫每罐重量！', 'error');
             return;
         }
         
@@ -157,6 +165,8 @@ class CatFoodApp {
             unit,
             stock,
             alertQty: alert,
+            perCanGrams,
+            price,
             notes: notes || null,
             createdAt: this.editingId ? this.foods.find(f => f.id === this.editingId).createdAt : new Date().toISOString()
         };
@@ -199,6 +209,8 @@ class CatFoodApp {
             document.getElementById('food-unit').value = food.unit;
             document.getElementById('food-stock').value = food.stock;
             document.getElementById('food-alert').value = food.alertQty;
+            document.getElementById('food-per-can-grams').value = food.perCanGrams || '';
+            document.getElementById('food-price').value = food.price || '';
             document.getElementById('food-notes').value = food.notes || '';
             this.showModal('food-modal');
         }
@@ -209,6 +221,11 @@ class CatFoodApp {
         document.getElementById('food-form').reset();
         document.getElementById('food-stock').value = '0';
         document.getElementById('food-alert').value = '5';
+        
+        // 重置快速選擇模式
+        document.getElementById('quick-select-mode').checked = false;
+        toggleQuickSelectMode();
+        this.clearAllSuggestions();
     }
     
     // 📝 餵食記錄管理
@@ -776,11 +793,219 @@ function quickAdjustStock() {
     app.quickAdjustStock();
 }
 
+// 🔍 智能搜尋和級聯選擇功能
+let selectedBrand = null;
+let selectedType = null;
+let currentBrandSuggestions = [];
+let currentProductSuggestions = [];
+
+// 切換快速選擇模式
+function toggleQuickSelectMode() {
+    const isQuickMode = document.getElementById('quick-select-mode').checked;
+    const quickArea = document.getElementById('quick-select-area');
+    const manualArea = document.getElementById('manual-input-area');
+    
+    if (isQuickMode) {
+        quickArea.style.display = 'block';
+        manualArea.style.display = 'none';
+        
+        // 清空手動輸入的必填驗證
+        document.getElementById('food-name').removeAttribute('required');
+        document.getElementById('food-type').removeAttribute('required');
+        document.getElementById('food-unit').removeAttribute('required');
+    } else {
+        quickArea.style.display = 'none';
+        manualArea.style.display = 'block';
+        
+        // 恢復手動輸入的必填驗證
+        document.getElementById('food-name').setAttribute('required', '');
+        document.getElementById('food-type').setAttribute('required', '');
+        document.getElementById('food-unit').setAttribute('required', '');
+        
+        // 清空快速選擇的資料
+        selectedBrand = null;
+        selectedType = null;
+        app.clearAllSuggestions();
+    }
+}
+
+// 更新品牌選項
+function updateBrandOptions() {
+    selectedType = document.getElementById('quick-food-type').value;
+    selectedBrand = null;
+    
+    document.getElementById('brand-search').value = '';
+    document.getElementById('product-selection').style.display = 'none';
+    document.getElementById('product-search').value = '';
+    
+    app.clearAllSuggestions();
+    
+    if (selectedType) {
+        showBrandSuggestions();
+    }
+}
+
+// 搜尋品牌
+function searchBrands() {
+    if (!selectedType) return;
+    
+    const query = document.getElementById('brand-search').value;
+    const suggestions = window.foodSearchEngine.searchBrands(query, selectedType);
+    
+    currentBrandSuggestions = suggestions;
+    renderBrandSuggestions(suggestions);
+}
+
+// 顯示品牌建議
+function showBrandSuggestions() {
+    if (!selectedType) return;
+    
+    const query = document.getElementById('brand-search').value;
+    searchBrands();
+    
+    const dropdown = document.getElementById('brand-suggestions');
+    dropdown.classList.add('show');
+}
+
+// 隱藏品牌建議
+function hideBrandSuggestions() {
+    setTimeout(() => {
+        document.getElementById('brand-suggestions').classList.remove('show');
+    }, 200);
+}
+
+// 渲染品牌建議
+function renderBrandSuggestions(brands) {
+    const dropdown = document.getElementById('brand-suggestions');
+    
+    if (brands.length === 0) {
+        dropdown.innerHTML = '<div class="suggestion-item">沒有找到相符的品牌</div>';
+        return;
+    }
+    
+    dropdown.innerHTML = brands.map(brand => {
+        const brandInfo = window.foodSearchEngine.getBrandInfo(brand, selectedType);
+        return `
+            <div class="suggestion-item" onclick="selectBrand('${brand}')">
+                <div class="suggestion-brand">${brand}</div>
+                <div class="suggestion-country">${brandInfo?.country || ''}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+// 選擇品牌
+function selectBrand(brand) {
+    selectedBrand = brand;
+    document.getElementById('brand-search').value = brand;
+    document.getElementById('brand-suggestions').classList.remove('show');
+    
+    // 顯示產品選擇區域
+    document.getElementById('product-selection').style.display = 'block';
+    document.getElementById('product-search').focus();
+    
+    // 載入該品牌的產品
+    showProductSuggestions();
+}
+
+// 搜尋產品
+function searchProducts() {
+    if (!selectedBrand || !selectedType) return;
+    
+    const query = document.getElementById('product-search').value;
+    const suggestions = window.foodSearchEngine.searchProducts(query, selectedBrand, selectedType);
+    
+    currentProductSuggestions = suggestions;
+    renderProductSuggestions(suggestions);
+}
+
+// 顯示產品建議
+function showProductSuggestions() {
+    if (!selectedBrand || !selectedType) return;
+    
+    searchProducts();
+    
+    const dropdown = document.getElementById('product-suggestions');
+    dropdown.classList.add('show');
+}
+
+// 隱藏產品建議
+function hideProductSuggestions() {
+    setTimeout(() => {
+        document.getElementById('product-suggestions').classList.remove('show');
+    }, 200);
+}
+
+// 渲染產品建議
+function renderProductSuggestions(products) {
+    const dropdown = document.getElementById('product-suggestions');
+    
+    if (products.length === 0) {
+        dropdown.innerHTML = '<div class="suggestion-item">沒有找到相符的產品</div>';
+        return;
+    }
+    
+    dropdown.innerHTML = products.map((product, index) => {
+        const unitText = product.unit === 'can' ? '罐' : '公克';
+        const priceText = product.price ? `$${product.price}/${unitText}` : '';
+        const weightText = product.perCanGrams ? `${product.perCanGrams}g/罐` : '';
+        
+        return `
+            <div class="suggestion-item" onclick="selectProduct(${index})">
+                <div class="suggestion-product">${product.name}</div>
+                <div class="suggestion-details">
+                    ${weightText} ${priceText ? `| ${priceText}` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// 選擇產品
+function selectProduct(index) {
+    const product = currentProductSuggestions[index];
+    if (!product) return;
+    
+    // 填入表單資料
+    document.getElementById('food-name').value = product.name;
+    document.getElementById('food-brand').value = selectedBrand;
+    document.getElementById('food-type').value = selectedType;
+    document.getElementById('food-unit').value = product.unit;
+    
+    if (product.perCanGrams) {
+        document.getElementById('food-per-can-grams').value = product.perCanGrams;
+    }
+    
+    if (product.price) {
+        document.getElementById('food-price').value = product.price;
+    }
+    
+    // 設定預設警示數量
+    const defaultAlert = product.unit === 'can' ? 4 : 200;
+    document.getElementById('food-alert').value = defaultAlert;
+    
+    document.getElementById('product-search').value = product.name;
+    document.getElementById('product-suggestions').classList.remove('show');
+    
+    app.showNotification(`已選擇 ${selectedBrand} ${product.name}`, 'success');
+}
+
+// 清除所有建議
+CatFoodApp.prototype.clearAllSuggestions = function() {
+    document.getElementById('brand-suggestions').classList.remove('show');
+    document.getElementById('product-suggestions').classList.remove('show');
+    document.getElementById('brand-suggestions').innerHTML = '';
+    document.getElementById('product-suggestions').innerHTML = '';
+};
+
 // 🚀 初始化應用
 const app = new CatFoodApp();
 
 // 開發者控制台快捷方式
 console.log('🐾 貓咪罐罐 & 乾乾紀錄 已載入！');
+console.log('📚 食物資料庫已載入，包含以下品牌：');
+console.log('🥫 濕食品牌：', window.foodSearchEngine.getAllBrands('wet'));
+console.log('🍖 乾糧品牌：', window.foodSearchEngine.getAllBrands('dry'));
 console.log('可用命令：');
 console.log('- app.exportData() // 匯出資料');
 console.log('- app.clearAllData() // 清除所有資料');

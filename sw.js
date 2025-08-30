@@ -1,10 +1,11 @@
 /* 簡易離線快取：HTML + 靜態資產 */
-const CACHE_NAME = "cat-meals-v1";
+const CACHE_NAME = "cat-meals-v2";
 const ASSETS = [
   "./",
   "index.html",
   "app.html",
   "app.js",
+  "food-database.js",
   "manifest.webmanifest",
   "icons/icon-192.png",
   "icons/icon-512.png",
